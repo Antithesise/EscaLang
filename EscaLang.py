@@ -3,15 +3,61 @@ from types import LambdaType
 from time import sleep
 
 
-class Shop(NamedTuple):
+Shop_Names = """
+ABS         ABSolute value
+ADD         ADD
+ADDP        ADD and Pop
+AND         bitwise AND
+CHS         CHange Sign
+COM         COMpare
+COMP        COMpare and Pop
+COS         COSine
+DEC         DECrement
+DECP        DECrement and Pop
+DIV         DIVide
+DIVP        DIVide and Pop
+HLT         HaLT
+IN          INput from stream
+INC         INCrement
+INCP        INCrement and Pop
+INT         INTerrupt
+JIC         Jump If Condition
+JMP         JuMP
+LEN         LENgth
+LENP        LENgth and Pop
+MOV         MOVe
+MUL         MULtiply
+MULP        MULtiply
+NEG         NEGative
+NOP         No OPeration
+NOT         bitwise NOT
+OR          bitwise OR
+OUT         OUTput to stream
+POP         POP from escalator
+POW         POWer
+PUSH        PUSH to escalator
+SIN         SINe
+SUB         SUBtract
+SUBP        SUBtract and Pop
+TAN         TANgent
+XOR         bitwise XOR
+"""
+
+
+class Shopper(NamedTuple): # data / item on stack
+    value: Any
+
+
+class Shop(NamedTuple): # instruction / function
     name: str
     func: function
     price: function
 
 
-class Floor(NamedTuple):
+class Floor(NamedTuple): # escalator acts as stack
     no: int | None = None
     shops: dict[str, Shop] = {}
+    shoppers: list[Shopper] = []
 
     def clear(self):
         self.shops = {}
@@ -69,9 +115,9 @@ class Interpreter:
             # processing goes here
 
     def display(self):
-        for f in self.floors:
-            print(" | ".join(f.shops.keys()))
-            print("\n\\  \\    /  /\n  \\  \\/  /\n    \\  \\\n  /  /\\  \\\n/  /    \\  \\\n")
+        for f in reversed(self.floors):
+            print(f"Floor {f.no} | " + " | ".join(f.shops.keys()))
+            print("\n\\  \\        \n  \\  \\    \n    \\  \\\n      \\  \\\n        \\  \\\n") # escalator
             
 
     def clear(self):
